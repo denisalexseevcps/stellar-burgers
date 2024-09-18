@@ -14,8 +14,10 @@ export const Feed: FC = () => {
   console.log(orders.length);
 
   useEffect(() => {
-    dispatch(apiGetFeeds());
-  }, []);
+    if (!orders || orders.length === 0) {
+      dispatch(apiGetFeeds());
+    }
+  }, [dispatch, orders]);
 
   if (!orders.length) {
     return <Preloader />;

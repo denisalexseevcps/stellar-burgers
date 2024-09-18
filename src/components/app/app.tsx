@@ -11,7 +11,7 @@ import {
 } from '@pages';
 import '../../index.css';
 import { useDispatch } from '../../services/store';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
 import { apiGetUser } from '../../services/slices/userSlice';
@@ -22,6 +22,9 @@ import { useEffect } from 'react';
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const backgrd = location.state?.background;
+
   useEffect(() => {
     dispatch(apiGetIngredients());
     dispatch(apiGetUser());
@@ -29,25 +32,17 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={backgrd || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='*' element={<NotFound404 />} />
         <Route
           path='/feed/:number'
-          element={
-            <Modal title={''} onClose={() => navigate(-1)}>
-              <OrderInfo />
-            </Modal>
-          }
+          element={<OrderInfo title={`#${location.pathname.match(/\d+/)}`} />}
         />
         <Route
           path='/ingredients/:id'
-          element={
-            <Modal title={''} onClose={() => navigate(-1)}>
-              <IngredientDetails />
-            </Modal>
-          }
+          element={<IngredientDetails title='Детали ингредиента' />}
         />
         <Route
           path='/login'
@@ -101,11 +96,47 @@ const App = () => {
           path='/profile/orders/:number'
           element={
             <ProtectedRoute>
-              <OrderInfo />
+              <OrderInfo title={`#${location.pathname.match(/\d+/)}`} />
             </ProtectedRoute>
           }
         />
       </Routes>
+      {backgrd && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal
+                title={`#${location.pathname.match(/\d+/)}`}
+                onClose={() => navigate(-1)}
+              >
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title={'Детали ингредиента'} onClose={() => navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal
+                title={`#${location.pathname.match(/\d+/)}`}
+                onClose={() => navigate(-1)}
+              >
+                <ProtectedRoute onlyUnAuth>
+                  <OrderInfo />
+                </ProtectedRoute>
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };

@@ -7,7 +7,11 @@ import { useParams } from 'react-router-dom';
 import { TIngredient, TOrder } from '@utils-types';
 import { ingredientsArr } from '../../services/slices/ingredientsSlice';
 
-export const OrderInfo: FC = () => {
+interface TOrderProps {
+  title?: string;
+}
+
+export const OrderInfo: FC<TOrderProps> = (props) => {
   /** TODO: взять переменные orderData и ingredients из стора */
   // const orderData = {
   //   createdAt: '',
@@ -32,9 +36,11 @@ export const OrderInfo: FC = () => {
   });
 
   useEffect(() => {
-    getOrderByNumberApi(Number(orderId)).then((data) => {
-      setOrderData(data.orders[0]);
-    });
+    if (!orderData._id) {
+      getOrderByNumberApi(Number(orderId)).then((data) => {
+        setOrderData(data.orders[0]);
+      });
+    }
   });
 
   const ingredients: TIngredient[] = useSelector(ingredientsArr);
@@ -84,6 +90,6 @@ export const OrderInfo: FC = () => {
   if (!orderInfo) {
     return <Preloader />;
   }
-
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  // console.log(orderInfo);
+  return <OrderInfoUI {...props} orderInfo={orderInfo} />;
 };
