@@ -44,10 +44,10 @@ export const BurgerConstructor: FC = () => {
   // const orderModalData = null;
 
   const onOrderClick = () => {
-    console.log('constructorItems.bun', constructorItems.bun);
-    console.log('orderRequest', orderRequest);
+    // console.log('constructorItems.bun', constructorItems.bun);
+    // console.log('orderRequest', orderRequest);
     if (!constructorItems.bun || orderRequest) return;
-    if (!user) {
+    if (!user.name) {
       navigate('/login'), { replace: true };
       return;
     }
@@ -56,6 +56,7 @@ export const BurgerConstructor: FC = () => {
       ...constructorItems.ingredients.map((ingredient) => ingredient._id),
       constructorItems.bun._id
     ];
+    // console.log('orderIngredients', orderIngredients);
     dispatch(postOrder(orderIngredients));
   };
   const closeOrderModal = () => {
@@ -72,7 +73,7 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
+  // console.log(orderModalData);
   // return null;
 
   return (

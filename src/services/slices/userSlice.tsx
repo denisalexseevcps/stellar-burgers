@@ -82,12 +82,12 @@ export const userSlice = createSlice({
       });
     builder
       .addCase(apiGetUser.fulfilled, (state, action) => {
-        console.log('user done');
+        // console.log('user done');
         state.isAuthDone = true;
         state.user = action.payload.user;
       })
       .addCase(apiGetUser.rejected, (state, action) => {
-        console.log('error', action.error.message);
+        // console.log('error', action.error.message);
         state.isAuthDone = false;
         state.error = action.error.message;
       });

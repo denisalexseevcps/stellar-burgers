@@ -16,16 +16,16 @@ export const ProtectedRoute = ({
   const user = useSelector(getUser); // getUser — селектор получения пользователя из store
   const location = useLocation();
   // console.log(!user.name);
-  console.log('!isAuthChecked:', !isAuthChecked);
+  // console.log('!isAuthChecked:', !isAuthChecked);
 
   // if (isAuthChecked) {
   //   // пока идёт чекаут пользователя, показываем прелоадер
   //   return <Preloader />;
   // }
-  console.log('!user.name', !user.name);
-  console.log('isAuthChecked', !onlyUnAuth);
+  // console.log('!user.name', !user.name);
+  // console.log('isAuthChecked', !onlyUnAuth);
   if (!onlyUnAuth && !user.name) {
-    console.log('переход здесь');
+    // console.log('переход здесь');
     return <Navigate replace to='/login' state={{ from: location }} />; // в поле from объекта location.state записываем информацию о URL
   }
 

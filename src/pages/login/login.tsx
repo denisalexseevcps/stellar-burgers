@@ -22,7 +22,7 @@ export const Login: FC = () => {
     dispatch(apiUserLogin({ email, password }));
     const errorText = error || '';
   };
-  console.log(isLoading);
+  // console.log(isLoading);
 
   return (
     <>
