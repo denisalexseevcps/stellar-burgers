@@ -4,7 +4,8 @@ import {
   logoutApi,
   registerUserApi,
   TRegisterData,
-  updateUserApi
+  updateUserApi,
+  TLoginData
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
@@ -14,12 +15,48 @@ import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
 export const apiGetUser = createAsyncThunk('user/get', async () =>
   getUserApi()
 );
-export const apiUpdateUser = createAsyncThunk('user/update', updateUserApi);
-export const apiUserRegister = createAsyncThunk(
-  'user/register',
-  registerUserApi
-);
-export const apiUserLogin = createAsyncThunk('user/login', loginUserApi);
+
+export const apiUpdateUser = //createAsyncThunk('user/update', updateUserApi);
+  createAsyncThunk(
+    'user/update',
+    async (user: Partial<TRegisterData>, { rejectWithValue }) => {
+      try {
+        const updatedUser = await updateUserApi(user);
+        return updatedUser;
+      } catch (error) {
+        return rejectWithValue('Обновление пользователя не удалось');
+      }
+    }
+  );
+
+export const apiUserRegister = //createAsyncThunk('user/register', registerUserApi);
+  createAsyncThunk(
+    'user/register',
+    async (user: TRegisterData, { rejectWithValue }) => {
+      const data = await registerUserApi(user);
+      if (!data?.success) {
+        return rejectWithValue('Регистрация не удалась');
+      }
+      setCookie('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return data;
+    }
+  );
+
+export const apiUserLogin = //createAsyncThunk('user/login', loginUserApi);
+  createAsyncThunk(
+    'user/login',
+    async ({ email, password }: TLoginData, { rejectWithValue }) => {
+      const data = await loginUserApi({ email, password });
+      if (!data?.success) {
+        return rejectWithValue('Вход не удался');
+      }
+      setCookie('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return data.user;
+    }
+  );
+
 export const ApiUserLogout = createAsyncThunk('user/logout', async () => {
   logoutApi().then(() => {
     deleteCookie('accessToken');
@@ -69,7 +106,7 @@ export const userSlice = createSlice({
     builder
       .addCase(apiUserLogin.fulfilled, (state, action) => {
         state.isAuthDone = true;
-        state.user = action.payload.user;
+        state.user.email = action.payload.email;
         state.error = '';
       })
       .addCase(apiUserLogin.rejected, (state, action) => {
