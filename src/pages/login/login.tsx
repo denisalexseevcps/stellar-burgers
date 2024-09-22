@@ -20,8 +20,8 @@ export const Login: FC = () => {
   const location = useLocation();
 
   const dispatch = useDispatch();
-  console.log(isLoading);
-  console.log('error: ', error);
+  // console.log(isLoading);
+  // console.log('error: ', error);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
