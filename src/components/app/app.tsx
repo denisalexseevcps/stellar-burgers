@@ -14,7 +14,7 @@ import { useDispatch } from '../../services/store';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import styles from './app.module.css';
-import { apiGetUser } from '../../services/slices/userSlice';
+import { apiGetUser, verifyUser } from '../../services/slices/userSlice';
 import { apiGetIngredients } from '../../services/slices/ingredientsSlice';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { useEffect } from 'react';
@@ -27,7 +27,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(apiGetIngredients());
-    dispatch(apiGetUser());
+    dispatch(verifyUser());
   }, [dispatch]);
   return (
     <div className={styles.app}>

@@ -11,7 +11,7 @@ export const Profile: FC = () => {
   const dispatch = useDispatch();
   /** TODO: взять переменную из стора */
   const nameUser = useSelector(getName);
-  const emailUser = useSelector(getName);
+  const emailUser = useSelector(getEmail);
 
   const user = {
     name: nameUser,
@@ -31,7 +31,7 @@ export const Profile: FC = () => {
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+  }, [nameUser]);
 
   const isFormChanged =
     formValue.name !== user?.name ||

@@ -15,6 +15,15 @@ import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
 export const apiGetUser = createAsyncThunk('user/get', async () =>
   getUserApi()
 );
+export const verifyUser = createAsyncThunk(
+  'user/check',
+  async (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      await dispatch(apiGetUser());
+    }
+    dispatch(authChecked());
+  }
+);
 
 export const apiUpdateUser = //createAsyncThunk('user/update', updateUserApi);
   createAsyncThunk(
@@ -82,7 +91,11 @@ export const initialState: IUserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    authChecked: (state) => {
+      state.isAuthDone = true;
+    }
+  },
   selectors: {
     getUser: (state) => state.user,
     getAuthDone: (state) => state.isAuthDone,
@@ -107,6 +120,7 @@ export const userSlice = createSlice({
       .addCase(apiUserLogin.fulfilled, (state, action) => {
         state.isAuthDone = true;
         state.user.email = action.payload.email;
+        state.user.name = action.payload.name;
         state.error = '';
       })
       .addCase(apiUserLogin.rejected, (state, action) => {
@@ -122,6 +136,7 @@ export const userSlice = createSlice({
         // console.log('user done');
         state.isAuthDone = true;
         state.user = action.payload.user;
+        console.log(state.user);
       })
       .addCase(apiGetUser.rejected, (state, action) => {
         // console.log('error', action.error.message);
@@ -144,9 +159,25 @@ export const userSlice = createSlice({
       state.isAuthDone = false;
       state.user = { email: '', name: '' };
     });
+    builder
+      .addCase(verifyUser.pending, (state) => {
+        state.isAuthDone = true;
+        // state.isDataLoading = false;
+        // state.error = null;
+      })
+      .addCase(verifyUser.rejected, (state) => {
+        state.isAuthDone = false;
+        // state.isDataLoading = false;
+        state.error = 'Пользователь не зарегистрирован';
+      })
+      .addCase(verifyUser.fulfilled, (state) => {
+        state.isAuthDone = false;
+        // state.isDataLoading = true;
+      });
   }
 });
 
 export const { getAuthDone, getUser, getName, getError, getEmail } =
   userSlice.selectors;
 export const userReducer = userSlice.reducer;
+export const { authChecked } = userSlice.actions;

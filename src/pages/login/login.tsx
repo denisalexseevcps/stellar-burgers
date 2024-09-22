@@ -1,6 +1,8 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import {
   getUser,
   apiUserLogin,
@@ -14,15 +16,22 @@ export const Login: FC = () => {
   const [password, setPassword] = useState('');
   const isLoading = useSelector(getAuthDone);
   const error = useSelector(getError);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const dispatch = useDispatch();
+  console.log(isLoading);
+  console.log('error: ', error);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(apiUserLogin({ email, password }));
     const errorText = error || '';
+    dispatch(apiUserLogin({ email, password })).then(() => {});
   };
-  // console.log(isLoading);
+
+  if (isLoading) {
+    return <Navigate to={'/'} />;
+  }
 
   return (
     <>

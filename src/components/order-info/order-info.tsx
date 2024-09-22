@@ -41,7 +41,7 @@ export const OrderInfo: FC<TOrderProps> = (props) => {
         setOrderData(data.orders[0]);
       });
     }
-  });
+  }, [orderData]);
 
   const ingredients: TIngredient[] = useSelector(ingredientsArr);
 
