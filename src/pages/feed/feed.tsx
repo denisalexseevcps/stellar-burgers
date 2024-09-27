@@ -19,9 +19,13 @@ export const Feed: FC = () => {
     }
   }, [dispatch, orders]);
 
+  const handleGetAllFeeds = () => {
+    dispatch(apiGetFeeds());
+  };
+
   if (!orders.length) {
     return <Preloader />;
   }
 
-  return <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  return <FeedUI orders={orders} handleGetFeeds={handleGetAllFeeds} />;
 };
