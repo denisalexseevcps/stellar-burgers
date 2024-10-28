@@ -6,7 +6,7 @@ import {
   TRegisterData,
   updateUserApi,
   TLoginData
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
@@ -19,6 +19,7 @@ export const verifyUser = createAsyncThunk(
   'user/check',
   async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
+      console.log(getCookie('accessToken'));
       await dispatch(apiGetUser());
     }
     dispatch(authChecked());
