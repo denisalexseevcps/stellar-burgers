@@ -1,9 +1,6 @@
-const testUrl = 'http://localhost:4000/';
+// const testUrl = 'http://localhost:4000/';
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-// const ingredientBunSelector = '[data-cy=bun-ingredients]'
-// const ingredientMainSelector = '[data-cy=main-ingredients]'
-// const ingredientSauceSelector = '[data-cy=sauce-ingredients]'
 const inputEmal = 'input[name="email"]';
 const inputPassword = 'input[name=password]';
 const testUser = {
@@ -37,7 +34,7 @@ beforeEach(() => {
   // cy.intercept('POST', `${BASE_URL}/orders`, {
   //   fixture: 'orderResponse.json'
   // });
-  cy.visit(testUrl);
+  cy.visit('/');
   // cy.viewport(1440, 800);
   // cy.get('#modals').as('modal');
   
@@ -46,7 +43,7 @@ beforeEach(() => {
 describe('template spec', () => {
   
   it('доступность сервиса по адрeсу localhost:4000', () => {
-    cy.visit(testUrl);
+    cy.visit('/');
     cy.contains('Соберите бургер')
   });
 
@@ -57,7 +54,7 @@ describe('template spec', () => {
   });
 
   it('should show & hide ingredient popup', () => {
-    cy.visit(testUrl);
+    cy.visit('/');
     cy.contains('Соберите бургер')
     // // cy.get(testCardSelector).first().click();
     // // cy.get('[data-cy="643d69a5c3f7b9001cfa093c"]').click();
@@ -71,7 +68,7 @@ describe('template spec', () => {
   });
 
   it('Проверка добавления ингредиентов в конструктор', () => {
-    cy.visit(testUrl);
+    cy.visit('/');
     cy.contains('Соберите бургер')
     cy.get('[href="/ingredients/643d69a5c3f7b9001cfa093c"]').parent('li').contains('Добавить').click();
     cy.contains('Краторная булка N-200i (верх)')
@@ -98,7 +95,7 @@ describe('template spec', () => {
 describe('auth user', () => {
   
   it('should authorization user', () => {
-    cy.visit('http://localhost:4000/login')
+    cy.visit('/');
     // cy.wait(1000);
     cy.contains('Личный кабинет').click();
     cy.contains('Вход');
