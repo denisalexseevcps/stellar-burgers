@@ -4,7 +4,7 @@ import { getOrdersApi } from '../../utils/burger-api';
 
 export const apiGetOrder = createAsyncThunk('orders/userOrders', getOrdersApi);
 
-type TOrders = {
+export type TOrders = {
   orders: TOrder[];
 };
 
